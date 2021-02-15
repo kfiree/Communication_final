@@ -55,3 +55,17 @@ def q3():
         i += 1
 
 
+# ----- Task 1.4: Sniffing and-then Spoofing -----
+
+def spoof(pkt):
+    if ICMP in pkt:
+        ip = IP(src=pkt[IP].dst, dst=pkt[IP].src, ihl=pkt[IP].ihl)
+        icmp = ICMP(type = 0, id=pkt[ICMP].id, seq=pkt[ICMP].seq)
+
+        spoofedPkt = ip/icmp
+        send(spoofedPkt, verbose=0)
+        # check if echo reply
+
+
+def q4():
+    pkt = sniff(filter='icmp', prn=spoof)
