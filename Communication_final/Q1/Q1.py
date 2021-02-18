@@ -10,7 +10,7 @@ def print_pkt(pkt):
 def q1A_B():
     print("----- Task 1.1: Sniffing Packets -----")
     f1 = 'icmp'
-    f2 = 'tcp and dst port 23 and src host 10.9.0.5'
+    f2 = 'tcp and dst port 23 and src host 10.0.2.4'
     f3 = 'net 128.230.0.0/16'
 
     pkt1 = sniff(filter=f1, prn=print_pkt)
