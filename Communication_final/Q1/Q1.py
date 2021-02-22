@@ -11,7 +11,11 @@ def q1A_B():
     print("----- Task 1.1: Sniffing Packets -----")
     f1 = 'icmp'
     f2 = 'tcp and dst port 23 and src host 10.0.2.4'
+<<<<<<< HEAD
     f3 = 'dst net 128.230.0.0/16'
+=======
+    f3 = 'net 128.230.0.0/16'
+>>>>>>> b2293c45549ce73966a4924010e845ce28e18f62
 
     pkt1 = sniff(filter=f1, prn=print_pkt)
     pkt2 = sniff(filter=f2, prn=print_pkt)
