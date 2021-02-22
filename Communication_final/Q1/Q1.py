@@ -11,11 +11,8 @@ def q1A_B():
     print("----- Task 1.1: Sniffing Packets -----")
     f1 = 'icmp'
     f2 = 'tcp and dst port 23 and src host 10.0.2.4'
-<<<<<<< HEAD
     f3 = 'dst net 128.230.0.0/16'
-=======
-    f3 = 'net 128.230.0.0/16'
->>>>>>> b2293c45549ce73966a4924010e845ce28e18f62
+
 
     pkt1 = sniff(filter=f1, prn=print_pkt)
     pkt2 = sniff(filter=f2, prn=print_pkt)
@@ -26,8 +23,8 @@ def q1A_B():
 
 def q2():
     print("----- Task 1.2: Spoofing ICMP Packets -----")
-    ip = IP(src='1.2.3.4', dst = '10.0.2.7')  # add dest ( send it to another VM in the same network)
-    icmp = ICMP()
+    ip = IP(src='1.2.3.4', dst = '10.0.2.5')  # add dest ( send it to another VM in the same network)
+    icmp = ICMP(type=0)
     pkt = ip / icmp
     pkt.show()
     send(pkt, verbose=0)
@@ -66,7 +63,10 @@ def spoof(pkt):
         icmp = ICMP(type = 0, id=pkt[ICMP].id, seq=pkt[ICMP].seq)
 
         spoofedPkt = ip/icmp
-        send(spoofedPkt, verbose=0)
+        send(spoofedPkt)
+        pkt.show()
+
+        spoofedPkt.show()
         # check if echo reply
 
 
