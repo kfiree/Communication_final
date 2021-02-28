@@ -10,8 +10,9 @@ def print_pkt(pkt):
 def q1A_B():
     print("----- Task 1.1: Sniffing Packets -----")
     f1 = 'icmp'
-    f2 = 'tcp and dst port 23'
-    f3 = 'net 128.230.0.0/16'
+    f2 = 'tcp and dst port 23 and src host 10.0.2.4'
+    f3 = 'dst net 128.230.0.0/16'
+
 
     pkt1 = sniff(filter=f1, prn=print_pkt)
     pkt2 = sniff(filter=f2, prn=print_pkt)
@@ -22,8 +23,9 @@ def q1A_B():
 
 def q2():
     print("----- Task 1.2: Spoofing ICMP Packets -----")
-    ip = IP(src='1.2.3.4', dst = '10.0.2.7')  # add dest ( send it to another VM in the same network)
-    icmp = ICMP()
+    ip = IP(src='1.2.3.4', dst = '10.0.2.5')  # add dest ( send it to another VM in the same network)
+    icmp = ICMP(type=0)
+
     pkt = ip / icmp
     pkt.show()
     send(pkt, verbose=0)
@@ -31,8 +33,7 @@ def q2():
 
 # ----- Task 1.3: Traceroute -----
 
-# might use http://dnaeon.github.io/traceroute-in-python/
-#todo check what todo when there is no reply
+#todo check what need to be done when there is no reply
 def q3():
     messageReceived = False
     i = 1
@@ -64,12 +65,8 @@ def spoof(pkt):
         icmp = ICMP(type = 0, id=pkt[ICMP].id, seq=pkt[ICMP].seq)
 
         spoofedPkt = ip/icmp
-        print("---------------------------------------------------------------------------------------------------")
-        pkt.show()
-        print("############# spoofed ------ dst", spoofedPkt[IP].dst, " src=", spoofedPkt[IP].src, "#############")
-        spoofedPkt.show()
-        print("---------------------------------------------------------------------------------------------------")
-        send(spoofedPkt, verbose=0)
+
+        send(spoofedPkt)
         # check if echo reply 
 
 
@@ -78,16 +75,11 @@ def q4():
 
 
 
-pointersDict = {
-    1:q1A_B, 
-    2:q2, 
-    3:q3, 
-    4:q4
-    }
-
-task = pointersDict.get(int(input("choose task : \n task number 1.")))
+pointersDict = {1:q1A_B, 2:q2, 3:q3, 4:q4}
+taskNum= input("choose task : \n task number 1.")
+task = pointersDict.get(int(taskNum))
 
 if task is not None:
     task()
 else:
-    print('no such task')
+    print('\n no such task')
