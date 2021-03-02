@@ -68,8 +68,11 @@ def spoof(pkt):
     if ICMP in pkt and pkt[ICMP].type == 8:
         ip = IP(src=pkt[IP].dst, dst=pkt[IP].src, ihl=pkt[IP].ihl)
         icmp = ICMP(type = 0, id=pkt[ICMP].id, seq=pkt[ICMP].seq)
-
-        spoofedPkt = ip/icmp
+        
+        if pkt.haslayer(Raw):
+            spoofedPkt = ip/icmp/pkt[Raw].load
+        else:
+            spoofedPkt = ip/icmp
 
         send(spoofedPkt)
         # check if echo reply 
