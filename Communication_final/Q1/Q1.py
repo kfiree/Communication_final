@@ -37,24 +37,29 @@ def q2():
 def q3():
     messageReceived = False
     i = 1
-    hostName = 'ynet.co.il'
+    routeNum = 0
+    hostName = 'google.com'
     while not messageReceived:
-        print("#### iterarion num = ", i," ####")
+        print(".\n.\n")
         ip = IP(ttl=i, dst=hostName)  # add dst?
         icmp = ICMP()
         pkt = ip / icmp
-        reply = sr1(pkt, verbose=0)
+        reply = sr1(pkt, verbose=0, timeout = 5)
+
         if reply is None:
             # no reply
             print('error. no reply received')
+
+        #type == 0 -> (echo reply) dest reached
+        elif reply.type == 0:
+            print("we have reached our destination, and it only took ", routeNum, "routes")
             break
-        elif reply.type == 3:
-            print("we have reached our destination, and its only took ", i, "routes")
-            messageReceived = True
+
+        #should be type == 11 ->  packet time to live exceeded
         else:
-            print("message have been dropped by", reply.src, " after ", i, " routers")
+            print("dropped by", reply.src,"\npassed through", routeNum, "routers, reply type =", reply.type)
+            routeNum += 1
         i += 1
-    print("we have reached our destination, and its only took ", i, "routes!")
 
 # ----- Task 1.4: Sniffing and-then Spoofing -----
 
