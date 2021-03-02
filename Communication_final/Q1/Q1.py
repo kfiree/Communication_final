@@ -64,7 +64,9 @@ def q3():
 # ----- Task 1.4: Sniffing and-then Spoofing -----
 
 def spoof(pkt):
-    #print("original ---- dst", pkt[IP].dst, " src=", pkt[IP].src)
+    # spoof echo reply for the captured echo request
+    #       - switch dest and src
+    #       - icmp type = 0 (echo reply)
     if ICMP in pkt and pkt[ICMP].type == 8:
         ip = IP(src=pkt[IP].dst, dst=pkt[IP].src, ihl=pkt[IP].ihl)
         icmp = ICMP(type = 0, id=pkt[ICMP].id, seq=pkt[ICMP].seq)
