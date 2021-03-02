@@ -24,6 +24,18 @@ struct ipheader {
   struct  in_addr    iph_sourceip; //Source IP address
   struct  in_addr    iph_destip;   //Destination IP address
 };
+/* TCP header */
+struct tcpheader{
+  uint16_t src_port;
+  uint16_t dst_port;
+  uint32_t seq;
+  uint32_t ack;
+  uint8_t  data_offset;  // 4 bits
+  uint8_t  flags;
+  uint16_t window_size;
+  uint16_t checksum;
+  uint16_t urgent_p;
+};
 
 void got_packet(u_char *args, const struct pcap_pkthdr *header,
                               const u_char *packet)
@@ -35,7 +47,12 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header,
                            (packet + sizeof(struct ethheader)); 
 
     printf("       From: %s\n", inet_ntoa(ip->iph_sourceip));   
-    printf("         To: %s\n", inet_ntoa(ip->iph_destip));    
+    printf("         To: %s\n", inet_ntoa(ip->iph_destip));   
+    
+    struct tcpheader *tcp = (struct tcpheader *)(packet + sizeof(struct ethheader) + sizeof(struct ipheader));
+      
+    printf("       From: %d\n", ntohs(tcp->src_port));   
+    printf("         To: %d\n", ntohs(tcp->dst_port));  
 
     /* determine protocol */
     switch(ip->iph_protocol) {                                 
