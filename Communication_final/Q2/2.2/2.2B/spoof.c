@@ -47,12 +47,11 @@ int main(){
    	struct icmpheader *icmp = (struct icmpheader *)(buffer + sizeof(struct ipheader));
    	icmp->icmp_type = 8; //ICMP Type: 8 is request, 0 is reply.
 
-	// Calculate the checksum for integrity
+	
 	icmp->icmp_chksum = 0;
 	//icmp->icmp_chksum = in_cksum((unsigned short *)icmp, sizeof(struct icmpheader));
 	
-	// - fill in the data part if needed ...
-	// Note: you should pay attention to the network/host byte order.
+
 	/* Send out the IP packet.
 	* ip_len is the actual size of the packet. */
 
